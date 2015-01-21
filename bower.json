@@ -1,0 +1,20 @@
+{
+  "name": "front-end",
+  "version": "0.0.0",
+  "homepage": "https://github.com/hugodes/front-end",
+  "authors": [
+    "Hugo Des <hugo.deslongchamps@gmail.com>"
+  ],
+  "license": "GPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}
