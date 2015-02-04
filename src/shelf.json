@@ -1,0 +1,18 @@
+{
+    "drawers": [
+        {
+            "pdfs": [{
+                    "url": "pdf_files/taskiran-mikael-cv.pdf",
+                    "name": "myFirstPdfs"
+                }],
+            "name": "myFirstDrawer"
+        },
+        {
+            "pdfs": [{
+                    "url": "pdf_files/taskiran-mikael-cv.pdf",
+                    "name": "myFirstPdfs"
+                }],
+            "name": "myFirstDrawer"
+        }],
+    "name": "firstShelf"
+}
