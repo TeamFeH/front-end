@@ -18,14 +18,14 @@ document.body.appendChild(renderer.domElement);
 // Call server to get shelf's json
 $.ajax({
     type: "GET",
-    dataType: "text",
+    dataType: "json",
     crossDomain: true,
-    url: "shelf.json",
+    url: "http://127.0.0.1:8000/get_json/shelf_dev/",
     success: function (responseData, textStatus, jqXHR) {
         localStorage.setItem("shelf", responseData);
     },
     error: function (responseData, textStatus, errorThrown) {
-        alert('POST failed.');
+        console.log('Ajax call failed');
     }
 });
 
@@ -42,7 +42,7 @@ generateFloor('images/floor.jpg');
 // Listen to mouse down event (call onDocumentMouseDown)
 document.addEventListener('mousedown', onDocumentMouseDown, false);
 
-// Usefull to color cubes on click 
+// Usefull to color cubes on click
 raycaster = new THREE.Raycaster();
 mouse = new THREE.Vector2();
 
