@@ -5,10 +5,9 @@ var objects = [];
 // create scene and camera
 var scene = new THREE.Scene();
 camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
+camera.position.z = 20;
+camera.position.y = 40;
 controls = new THREE.OrbitControls(camera);
-camera.position.z = 30;
-camera.position.y = 5;
-
 // create a renderer, set its size, append it to the document.
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -18,7 +17,7 @@ document.body.appendChild(renderer.domElement);
 // Call server to get shelf's json
 $.ajax({
     type: "GET",
-    dataType: "json",
+    dataType: "text",
     crossDomain: true,
     url: "http://127.0.0.1:8000/get_json/shelf_dev/",
     success: function (responseData, textStatus, jqXHR) {
