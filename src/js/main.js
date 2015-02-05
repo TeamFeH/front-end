@@ -4,9 +4,9 @@ var objects = [];
 
 // create scene and camera
 var scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.z = 20;
-camera.position.y = 40;
+camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 1, 1000);
+camera.position.z = 30;
+camera.position.y = 20;
 controls = new THREE.OrbitControls(camera);
 // create a renderer, set its size, append it to the document.
 var renderer = new THREE.WebGLRenderer();
