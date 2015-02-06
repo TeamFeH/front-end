@@ -1,6 +1,7 @@
 /*
  * Generate one shelf and add it to scene
  */
+
 function generateShelf(obj_shelf, url_texture, position) {
     nbDrawers = (obj_shelf.drawers).length;
     for (var i = 0; i < nbDrawers; i++) {

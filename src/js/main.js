@@ -35,6 +35,10 @@ shelf = JSON.parse(localStorage.getItem("shelf"));
 // TODO : loop on shelf list (json)
 generateShelf(shelf, 'images/white-wood.jpg', 0);
 
+// Used for test only - change the z position of the first cube // Theoz 06 - 02 - 2014
+var tweenOpen = new TWEEN.Tween(objects[0].position)
+                    .to({z : 2},1000);
+
 // Generate floor
 generateFloor('images/floor.jpg');
 
@@ -49,6 +53,7 @@ mouse = new THREE.Vector2();
 var render = function () {
     requestAnimationFrame(render);
     renderer.render(scene, camera);
+    TWEEN.update();
 };
 
 // Calling the render function
@@ -69,4 +74,9 @@ function onDocumentMouseDown(event) {
         intersects[ 0 ].object.material.color.setHex(Math.random() * 0xffffff);
         console.debug(intersects[ 0 ].object.material);
     }
+}
+
+//Tweens function
+function openDrawer(){
+    tweenOpen.start();
 }
