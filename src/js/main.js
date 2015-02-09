@@ -75,20 +75,19 @@ function onDocumentMouseDown(event) {
         var drawerName = intersects[0].object.drawer_name;
         for (var i = 0; i < objects.length; i++) {
             if (objects[i].name === drawerName) {
-                console.log(objects[i].position);
+                // Ouvre le drawer
                 if (objects[i].is_opened === false) {
+                      // Animation ouverture
                       tweenOpen = new TWEEN.Tween(objects[i].position)
-                      .to({z : objects[i].position.z + 5},1000);
+                      .to({z : objects[i].base_pos_z + 5},1000);
                       tweenOpen.start();
 
-                 //   objects[i].position.z += 5;
                     objects[i].is_opened = true;
                 } else {
+                     // Animation fermeture
                      tweenClose = new TWEEN.Tween(objects[i].position)
-                         .to({z : objects[i].position.z - 5}, 1000)
+                         .to({z : objects[i].base_pos_z}, 1000)
                          .start();
-
-                 //   objects[i].position.z -= 5;
 
                     objects[i].is_opened = false;
                 }
