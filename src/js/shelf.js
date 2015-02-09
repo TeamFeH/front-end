@@ -47,6 +47,9 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         planeBottom.position.x = pos_x;
         planeBottom.position.y = 0.5 + i + pos_y;
         planeBottom.position.z = 5 + pos_z;
+        planeBottom['base_pos_x'] = pos_x;
+        planeBottom['base_pos_y'] = 0.5 + i + pos_y;
+        planeBottom['base_pos_z'] = 5 + pos_z;
         planeBottom['name'] = obj_shelf.drawers[i].name;
         planeBottom["shelf_name"] = obj_shelf.name;
         planeBottom["drawer_name"] = obj_shelf.drawers[i].name;
@@ -59,6 +62,9 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         planeLeft.position.x = -2.5 + pos_x;
         planeLeft.position.y = 1 + i + pos_y;
         planeLeft.position.z = 5 + pos_z;
+        planeLeft['base_pos_x'] = -2.5 + pos_x;
+        planeLeft['base_pos_y'] = 1 + i + pos_y;
+        planeLeft['base_pos_z'] = 5 + pos_z;
         planeLeft['name'] = obj_shelf.drawers[i].name;
         planeLeft["shelf_name"] = obj_shelf.name;
         planeLeft["drawer_name"] = obj_shelf.drawers[i].name;
@@ -71,6 +77,9 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         planeRight.position.x = 2.5 + pos_x;
         planeRight.position.y = 1 + i + pos_y;
         planeRight.position.z = 5 + pos_z;
+        planeRight['base_pos_x'] = 2.5 + pos_x;
+        planeRight['base_pos_y'] = 1 + i + pos_y;
+        planeRight['base_pos_z'] = 5 + pos_z;
         planeRight['name'] = obj_shelf.drawers[i].name;
         planeRight["shelf_name"] = obj_shelf.name;
         planeRight["drawer_name"] = obj_shelf.drawers[i].name;
@@ -82,6 +91,9 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         planeFront.position.x = pos_x;
         planeFront.position.y = 1 + i + pos_y;
         planeFront.position.z = 7.5 + pos_z;
+        planeFront['base_pos_x'] = pos_x;
+        planeFront['base_pos_y'] = 1 + i + pos_y;
+        planeFront['base_pos_z'] = 7.5 + pos_z;
         planeFront['name'] = obj_shelf.drawers[i].name;
         planeFront["shelf_name"] = obj_shelf.name;
         planeFront["drawer_name"] = obj_shelf.drawers[i].name;
@@ -93,6 +105,9 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         planeBack.position.x = pos_x;
         planeBack.position.y = 1 + i + pos_y;
         planeBack.position.z = 2.5 + pos_z;
+        planeBack['base_pos_x'] = pos_x;
+        planeBack['base_pos_y'] = 1 + i + pos_y;
+        planeBack['base_pos_z'] = 2.5 + pos_z;
         planeBack['name'] = obj_shelf.drawers[i].name;
         planeBack["shelf_name"] = obj_shelf.name;
         planeBack["drawer_name"] = obj_shelf.drawers[i].name;
