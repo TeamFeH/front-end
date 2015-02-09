@@ -31,9 +31,6 @@ $.ajax({
 // Get the shelf in the local storage
 var shelf = JSON.parse(localStorage.getItem("shelf"));
 
-// Used for test only - change the z position of the first cube // Theoz 06 - 02 - 2014
-var tweenOpen = new TWEEN.Tween(objects[0].position)
-                    .to({z : 2},1000);
 
 // Generate drawer
 generateDrawer(shelf, 'images/shelf.jpg', 0, 0, 0);
@@ -72,24 +69,30 @@ function onDocumentMouseDown(event) {
     var intersects = raycaster.intersectObjects(objects);
 
     // Cube trick
+    var tweenOpen,tweenClose;
     // Search all objects (faces) of the same drawer and move them on click
     if (intersects.length > 0) {
         var drawerName = intersects[0].object.drawer_name;
         for (var i = 0; i < objects.length; i++) {
             if (objects[i].name === drawerName) {
+                console.log(objects[i].position);
                 if (objects[i].is_opened === false) {
-                    objects[i].position.z += 5;
+                      tweenOpen = new TWEEN.Tween(objects[i].position)
+                      .to({z : objects[i].position.z + 5},1000);
+                      tweenOpen.start();
+
+                 //   objects[i].position.z += 5;
                     objects[i].is_opened = true;
                 } else {
-                    objects[i].position.z -= 5;
+                     tweenClose = new TWEEN.Tween(objects[i].position)
+                         .to({z : objects[i].position.z - 5}, 1000)
+                         .start();
+
+                 //   objects[i].position.z -= 5;
+
                     objects[i].is_opened = false;
                 }
             }
         }
     }
-}
-
-//Tweens function
-function openDrawer(){
-    tweenOpen.start();
 }
