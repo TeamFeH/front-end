@@ -4,9 +4,9 @@ var objects = [];
 
 // create scene and camera
 var scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 1, 1000);
+camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 1000);
 camera.position.z = 30;
-camera.position.y = 20;
+camera.position.y = 10;
 controls = new THREE.OrbitControls(camera);
 // create a renderer, set its size, append it to the document.
 var renderer = new THREE.WebGLRenderer();
@@ -29,12 +29,10 @@ $.ajax({
 });
 
 // Get the shelf in the local storage
-shelf = JSON.parse(localStorage.getItem("shelf"));
+var shelf = JSON.parse(localStorage.getItem("shelf"));
 
-// Generate shelf
-// TODO : loop on shelf list (json)
-generateShelf(shelf, 'images/white-wood.jpg', 0);
-
+// Generate drawer
+generateDrawer(shelf, 'images/shelf.jpg', 0, 0, 0);
 // Generate floor
 generateFloor('images/floor.jpg');
 
@@ -58,15 +56,30 @@ function onDocumentMouseDown(event) {
 
     event.preventDefault();
 
+    // Mouse position
     mouse.x = (event.clientX / renderer.domElement.width) * 2 - 1;
     mouse.y = -(event.clientY / renderer.domElement.height) * 2 + 1;
 
+    // Useful to interact with objets on a scene
     raycaster.setFromCamera(mouse, camera);
 
+    // Get clicked object
     var intersects = raycaster.intersectObjects(objects);
 
+    // Cube trick
+    // Search all objects (faces) of the same drawer and move them on click
     if (intersects.length > 0) {
-        intersects[ 0 ].object.material.color.setHex(Math.random() * 0xffffff);
-        console.debug(intersects[ 0 ].object.material);
+        var drawerName = intersects[0].object.drawer_name;
+        for (var i = 0; i < objects.length; i++) {
+            if (objects[i].name === drawerName) {
+                if (objects[i].is_opened === false) {
+                    objects[i].position.z += 5;
+                    objects[i].is_opened = true;
+                } else {
+                    objects[i].position.z -= 5;
+                    objects[i].is_opened = false;
+                }
+            }
+        }
     }
 }
