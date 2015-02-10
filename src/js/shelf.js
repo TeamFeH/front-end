@@ -1,27 +1,4 @@
 /**
- * Generate one shelf and add it to scene
- * @param object obj_shelf
- * @param string url_texture
- * @param integer position
- * @returns {undefined}
- */
-
-function generateShelf(obj_shelf, url_texture, position) {
-    nbDrawers = (obj_shelf.drawers).length;
-    for (var i = 0; i < nbDrawers; i++) {
-        var cubegeometry = new THREE.BoxGeometry(5, 1, 5);
-        texture = THREE.ImageUtils.loadTexture(url_texture);
-        var cubematerial = new THREE.MeshBasicMaterial({wireframe: false, map: texture, side: THREE.DoubleSide});
-        // The mesh basically takes the geometry and material specified above and uses them to create the actual cube.
-        var cube = new THREE.Mesh(cubegeometry, cubematerial);
-        cube.position.set(position, i + 1, 0);
-        // The cube is then added to the scene.
-        scene.add(cube);
-        objects.push(cube);
-    }
-}
-
-/**
  * Generate 5 planes for each drawer
  * @param {type} obj_shelf
  * @param {type} url_texture
@@ -128,4 +105,43 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         objects.push(planeFront);
         objects.push(planeBack);
     }
+}
+
+function generateEdges(url_texture, pos_x, pos_y, pos_z, nb_drawer) {
+    texture = THREE.ImageUtils.loadTexture(url_texture);
+    
+    var geometrySides = new THREE.PlaneBufferGeometry(5, nb_drawer);
+    var materialSides = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+    
+    var geometryTop = new THREE.PlaneBufferGeometry(5, 5);
+    var materialTop = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+
+    var edgeLeft = new THREE.Mesh(geometrySides, materialSides);
+    edgeLeft.rotation.y = Math.PI / 2;
+    edgeLeft.position.x = -2.51 + pos_x;
+    edgeLeft.position.y = 1 + 1 + pos_y;
+    edgeLeft.position.z = 5 + pos_z;
+
+    var edgeRight = new THREE.Mesh(geometrySides, materialSides);
+    edgeRight.rotation.y = Math.PI / 2;
+    edgeRight.position.x = 2.51 + pos_x;
+    edgeRight.position.y = 1 + 1 + pos_y;
+    edgeRight.position.z = 5 + pos_z;
+
+    var edgeBack = new THREE.Mesh(geometrySides, materialSides);
+    edgeBack.position.x = pos_x;
+    edgeBack.position.y = 1 + 1 + pos_y;
+    edgeBack.position.z = 2.49 + pos_z;
+
+    var edgeBottom = new THREE.Mesh(geometryTop, materialTop);
+    edgeBottom.rotation.x = Math.PI / 2;
+    edgeBottom.position.x = pos_x;
+    edgeBottom.position.y = 0.5 + (1*nb_drawer) + pos_y;
+    edgeBottom.position.z = 5 + pos_z;
+
+    scene.add(edgeLeft);
+    scene.add(edgeRight);
+    scene.add(edgeBack);
+    scene.add(edgeBottom);
+
 }

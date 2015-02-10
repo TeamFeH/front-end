@@ -34,6 +34,7 @@ var shelf = JSON.parse(localStorage.getItem("shelf"));
 
 // Generate drawer
 generateDrawer(shelf, 'images/shelf.jpg', 0, 0, 0);
+generateEdges('images/shelf_edge.jpg', 0,0,0, (shelf.drawers).length);
 // Generate floor
 generateFloor('images/floor.jpg');
 
