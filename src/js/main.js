@@ -14,6 +14,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000011, 1);
 document.body.appendChild(renderer.domElement);
 
+console.log(THREE.FontUtils.faces);
+
 // Call server to get shelf's json
 $.ajax({
     type: "GET",
@@ -31,11 +33,11 @@ $.ajax({
 // Get the shelf in the local storage
 var shelf = JSON.parse(localStorage.getItem("shelf"));
 
-
-// Generate drawer
-generateDrawer(shelf, 'images/shelf.jpg', 0, 0, 0);
 // Generate floor
 generateFloor('images/floor.jpg');
+// Generate drawer
+generateShelf(shelf, 'images/shelf.jpg','images/shelf_edge.jpg', 0, 0, 0, "common");
+//generateEdges(shelf, 'images/shelf_edge.jpg', 0,0,0, "common");
 
 // Listen to mouse down event (call onDocumentMouseDown)
 document.addEventListener('mousedown', onDocumentMouseDown, false);
@@ -75,20 +77,19 @@ function onDocumentMouseDown(event) {
         var drawerName = intersects[0].object.drawer_name;
         for (var i = 0; i < objects.length; i++) {
             if (objects[i].name === drawerName) {
-                console.log(objects[i].position);
+                // Ouvre le drawer
                 if (objects[i].is_opened === false) {
+                      // Animation open
                       tweenOpen = new TWEEN.Tween(objects[i].position)
-                      .to({z : objects[i].position.z + 5},1000);
+                      .to({z : objects[i].base_pos_z + 5},1000);
                       tweenOpen.start();
 
-                 //   objects[i].position.z += 5;
                     objects[i].is_opened = true;
                 } else {
+                     // Animation close
                      tweenClose = new TWEEN.Tween(objects[i].position)
-                         .to({z : objects[i].position.z - 5}, 1000)
+                         .to({z : objects[i].base_pos_z}, 1000)
                          .start();
-
-                 //   objects[i].position.z -= 5;
 
                     objects[i].is_opened = false;
                 }
