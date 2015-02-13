@@ -100,6 +100,30 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
         planeBack["drawer_type"] = "back";
         planeBack["is_opened"] = false;
 
+        // Text
+        var material = new THREE.MeshBasicMaterial({
+            color: 0xDAB30A
+        });
+        var textGeom = new THREE.TextGeometry( obj_shelf.drawers[i].name, {
+            size: 0.4, height: 0,
+            font: 'helvetiker', weight: 'normal',
+            bevelThickness: 0.1,
+            bevelSize: 0,
+            bevelEnabled: true
+        });
+
+        var drawerNameMesh = new THREE.Mesh (textGeom, material);
+        drawerNameMesh.position.x = pos_x - 1;
+        drawerNameMesh.position.y = 0.8+i+pos_y;
+        drawerNameMesh.position.z = pos_z + 7.5;
+        drawerNameMesh['base_pos_x'] = pos_x - 2;
+        drawerNameMesh['base_pos_y'] = 0.8 + i + pos_y;
+        drawerNameMesh['base_pos_z'] = pos_z + 7.5
+        drawerNameMesh['name'] = obj_shelf.drawers[i].name;
+        drawerNameMesh['drawer_name'] = obj_shelf.drawers[i].name;
+        drawerNameMesh['is_opened'] = false;
+        drawerNameMesh['type'] = "text";
+
         // Left edge
         var edgeLeft = new THREE.Mesh(geometryEdgeSmall, materialEdgeSmall);
         edgeLeft.rotation.y = Math.PI / 2;
@@ -133,12 +157,18 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
         scene.add(edgeRight);
         scene.add(edgeBack);
 
+        // Aded text to scene
+        scene.add(drawerNameMesh);
+
         // Add planes to objects list
         objects.push(planeBottom);
         objects.push(planeLeft);
         objects.push(planeRight);
         objects.push(planeFront);
         objects.push(planeBack);
+
+        //Add text to objets list
+        objects.push(drawerNameMesh);
     }
 
     // Top edge
