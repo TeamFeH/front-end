@@ -34,7 +34,7 @@ $.ajax({
 var shelf = JSON.parse(localStorage.getItem("shelf"));
 
 // Generate floor
-generateFloor('images/floor.jpg');
+generateFloor('images/floor.jpg', 100, 100, "common");
 // Generate drawer
 generateShelf(shelf, 'images/shelf.jpg','images/shelf_edge.jpg', 0, 0, 0, "common");
 //generateEdges(shelf, 'images/shelf_edge.jpg', 0,0,0, "common");
