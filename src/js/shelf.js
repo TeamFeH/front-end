@@ -5,9 +5,10 @@
  * @param {type} position
  * @returns {undefined}
  */
-function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
+function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, pos_z, drawer_type) {
     nbDrawers = (obj_shelf.drawers).length;
     texture = THREE.ImageUtils.loadTexture(url_texture);
+    texture_edge = THREE.ImageUtils.loadTexture(url_texture_edge);
 
     // Geometry used for bottom plane
     var geometry = new THREE.PlaneBufferGeometry(5, 5);
@@ -17,16 +18,24 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
     var geometrySmall = new THREE.PlaneBufferGeometry(5, 1);
     var materialSmall = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
 
+    var geometryEdge = new THREE.PlaneBufferGeometry(5, 5);
+    var materialEdge = new THREE.MeshBasicMaterial({map: texture_edge, side: THREE.DoubleSide});
+
+    var geometryEdgeSmall = new THREE.PlaneBufferGeometry(5, 1);
+    var materialEdgeSmall = new THREE.MeshBasicMaterial({map: texture_edge, side: THREE.DoubleSide});
+
+    var geomPos = getEdgeGeometryPositon(drawer_type);
+
     for (var i = 0; i < nbDrawers; i++) {
         // Bottom plane
         var planeBottom = new THREE.Mesh(geometry, material);
         planeBottom.rotation.x = Math.PI / 2;
         planeBottom.position.x = pos_x;
-        planeBottom.position.y = 0.5 + i + pos_y;
-        planeBottom.position.z = 5 + pos_z;
+        planeBottom.position.y = -(geomPos.scale / 2) + i + pos_y;
+        planeBottom.position.z = geomPos.geometry + pos_z;
         planeBottom['base_pos_x'] = pos_x;
-        planeBottom['base_pos_y'] = 0.5 + i + pos_y;
-        planeBottom['base_pos_z'] = 5 + pos_z;
+        planeBottom['base_pos_y'] = geomPos.spacing + i + pos_y;
+        planeBottom['base_pos_z'] = geomPos.geometry + pos_z;
         planeBottom['name'] = obj_shelf.drawers[i].name;
         planeBottom["shelf_name"] = obj_shelf.name;
         planeBottom["drawer_name"] = obj_shelf.drawers[i].name;
@@ -36,12 +45,12 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         // Left Plane
         var planeLeft = new THREE.Mesh(geometrySmall, materialSmall);
         planeLeft.rotation.y = Math.PI / 2;
-        planeLeft.position.x = -2.5 + pos_x;
-        planeLeft.position.y = 1 + i + pos_y;
-        planeLeft.position.z = 5 + pos_z;
-        planeLeft['base_pos_x'] = -2.5 + pos_x;
-        planeLeft['base_pos_y'] = 1 + i + pos_y;
-        planeLeft['base_pos_z'] = 5 + pos_z;
+        planeLeft.position.x = -(geomPos.geometry / 2) + pos_x;
+        planeLeft.position.y = i + pos_y;
+        planeLeft.position.z = geomPos.geometry + pos_z;
+        planeLeft['base_pos_x'] = -(geomPos.geometry / 2) + pos_x;
+        planeLeft['base_pos_y'] = i + pos_y;
+        planeLeft['base_pos_z'] = geomPos.geometry + pos_z;
         planeLeft['name'] = obj_shelf.drawers[i].name;
         planeLeft["shelf_name"] = obj_shelf.name;
         planeLeft["drawer_name"] = obj_shelf.drawers[i].name;
@@ -51,12 +60,12 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         // Right Plane
         var planeRight = new THREE.Mesh(geometrySmall, materialSmall);
         planeRight.rotation.y = Math.PI / 2;
-        planeRight.position.x = 2.5 + pos_x;
-        planeRight.position.y = 1 + i + pos_y;
-        planeRight.position.z = 5 + pos_z;
-        planeRight['base_pos_x'] = 2.5 + pos_x;
-        planeRight['base_pos_y'] = 1 + i + pos_y;
-        planeRight['base_pos_z'] = 5 + pos_z;
+        planeRight.position.x = (geomPos.geometry / 2) + pos_x;
+        planeRight.position.y = i + pos_y;
+        planeRight.position.z = geomPos.geometry + pos_z;
+        planeRight['base_pos_x'] = (geomPos.geometry / 2) + pos_x;
+        planeRight['base_pos_y'] = i + pos_y;
+        planeRight['base_pos_z'] = geomPos.geometry + pos_z;
         planeRight['name'] = obj_shelf.drawers[i].name;
         planeRight["shelf_name"] = obj_shelf.name;
         planeRight["drawer_name"] = obj_shelf.drawers[i].name;
@@ -66,11 +75,11 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         // Front Plane
         var planeFront = new THREE.Mesh(geometrySmall, materialSmall);
         planeFront.position.x = pos_x;
-        planeFront.position.y = 1 + i + pos_y;
-        planeFront.position.z = 7.5 + pos_z;
+        planeFront.position.y = i + pos_y;
+        planeFront.position.z = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z;
         planeFront['base_pos_x'] = pos_x;
-        planeFront['base_pos_y'] = 1 + i + pos_y;
-        planeFront['base_pos_z'] = 7.5 + pos_z;
+        planeFront['base_pos_y'] = i + pos_y;
+        planeFront['base_pos_z'] = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z;
         planeFront['name'] = obj_shelf.drawers[i].name;
         planeFront["shelf_name"] = obj_shelf.name;
         planeFront["drawer_name"] = obj_shelf.drawers[i].name;
@@ -80,16 +89,37 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         // Back Plane
         var planeBack = new THREE.Mesh(geometrySmall, materialSmall);
         planeBack.position.x = pos_x;
-        planeBack.position.y = 1 + i + pos_y;
-        planeBack.position.z = 2.5 + pos_z;
+        planeBack.position.y = i + pos_y;
+        planeBack.position.z = (geomPos.geometry / 2) + pos_z;
         planeBack['base_pos_x'] = pos_x;
-        planeBack['base_pos_y'] = 1 + i + pos_y;
-        planeBack['base_pos_z'] = 2.5 + pos_z;
+        planeBack['base_pos_y'] = i + pos_y;
+        planeBack['base_pos_z'] = (geomPos.geometry / 2) + pos_z;
         planeBack['name'] = obj_shelf.drawers[i].name;
         planeBack["shelf_name"] = obj_shelf.name;
         planeBack["drawer_name"] = obj_shelf.drawers[i].name;
         planeBack["drawer_type"] = "back";
         planeBack["is_opened"] = false;
+
+        // Left edge
+        var edgeLeft = new THREE.Mesh(geometryEdgeSmall, materialEdgeSmall);
+        edgeLeft.rotation.y = Math.PI / 2;
+        edgeLeft.position.x = -((geomPos.geometry / 2) + geomPos.spacing) + pos_x;
+        edgeLeft.position.y = pos_y + i;
+        edgeLeft.position.z = geomPos.geometry + pos_z;
+
+        // Right edge
+        var edgeRight = new THREE.Mesh(geometryEdgeSmall, materialEdgeSmall);
+        edgeRight.rotation.y = Math.PI / 2;
+        edgeRight.position.x = (geomPos.geometry / 2) + geomPos.spacing + pos_x;
+        edgeRight.position.y = pos_y + i;
+        edgeRight.position.z = geomPos.geometry + pos_z;
+
+        // Back edge
+        var edgeBack = new THREE.Mesh(geometryEdgeSmall, materialEdgeSmall);
+        edgeBack.position.x = pos_x;
+        edgeBack.position.y = pos_y + i;
+        edgeBack.position.z = (geomPos.geometry / 2) - geomPos.spacing + pos_z;
+
 
         // Add planes to scene
         scene.add(planeBottom);
@@ -98,6 +128,11 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         scene.add(planeFront);
         scene.add(planeBack);
 
+        // Add edges to scene
+        scene.add(edgeLeft);
+        scene.add(edgeRight);
+        scene.add(edgeBack);
+
         // Add planes to objects list
         objects.push(planeBottom);
         objects.push(planeLeft);
@@ -105,43 +140,41 @@ function generateDrawer(obj_shelf, url_texture, pos_x, pos_y, pos_z) {
         objects.push(planeFront);
         objects.push(planeBack);
     }
-}
 
-function generateEdges(url_texture, pos_x, pos_y, pos_z, nb_drawer) {
-    texture = THREE.ImageUtils.loadTexture(url_texture);
-    
-    var geometrySides = new THREE.PlaneBufferGeometry(5, nb_drawer);
-    var materialSides = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
-    
-    var geometryTop = new THREE.PlaneBufferGeometry(5, 5);
-    var materialTop = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
-
-    var edgeLeft = new THREE.Mesh(geometrySides, materialSides);
-    edgeLeft.rotation.y = Math.PI / 2;
-    edgeLeft.position.x = -2.51 + pos_x;
-    edgeLeft.position.y = 1 + 1 + pos_y;
-    edgeLeft.position.z = 5 + pos_z;
-
-    var edgeRight = new THREE.Mesh(geometrySides, materialSides);
-    edgeRight.rotation.y = Math.PI / 2;
-    edgeRight.position.x = 2.51 + pos_x;
-    edgeRight.position.y = 1 + 1 + pos_y;
-    edgeRight.position.z = 5 + pos_z;
-
-    var edgeBack = new THREE.Mesh(geometrySides, materialSides);
-    edgeBack.position.x = pos_x;
-    edgeBack.position.y = 1 + 1 + pos_y;
-    edgeBack.position.z = 2.49 + pos_z;
-
-    var edgeBottom = new THREE.Mesh(geometryTop, materialTop);
+    // Top edge
+    var edgeBottom = new THREE.Mesh(geometryEdge, materialEdge);
     edgeBottom.rotation.x = Math.PI / 2;
     edgeBottom.position.x = pos_x;
-    edgeBottom.position.y = 0.5 + (1*nb_drawer) + pos_y;
-    edgeBottom.position.z = 5 + pos_z;
+    edgeBottom.position.y = -(geomPos.scale / 2) + pos_y;
+    edgeBottom.position.z = geomPos.geometry + pos_z;
 
-    scene.add(edgeLeft);
-    scene.add(edgeRight);
-    scene.add(edgeBack);
+    // Bottom edge
+    var edgeTop = new THREE.Mesh(geometryEdge, materialEdge);
+    edgeTop.rotation.x = Math.PI / 2;
+    edgeTop.position.x = pos_x;
+    edgeTop.position.y = -(geomPos.scale / 2) + nbDrawers + pos_y;
+    edgeTop.position.z = geomPos.geometry + pos_z;
+
+    scene.add(edgeTop);
     scene.add(edgeBottom);
+}
+
+/**
+ * 
+ * @param {type} drawer_type
+ * @returns {unresolved}
+ */
+function getEdgeGeometryPositon(drawer_type) {
+    switch (drawer_type) {
+        case "common":
+            var geomPos = {
+                geometry: 5,
+                spacing: 0.01,
+                scale: 1
+            };
+
+            return geomPos;
+            break;
+    }
 
 }

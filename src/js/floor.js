@@ -7,6 +7,6 @@ function generateFloor(url_texture) {
     var floorGeometry = new THREE.BoxGeometry(100, 100, 0.1);
     var floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = Math.PI / 2;
-    floor.position.z = -10;
+    floor.position.z = 0;
     scene.add(floor);
 }
