@@ -10,21 +10,23 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
     texture = THREE.ImageUtils.loadTexture(url_texture);
     texture_edge = THREE.ImageUtils.loadTexture(url_texture_edge);
 
+    var geomPos = getEdgeGeometryPositon(drawer_type);
+    
     // Geometry used for bottom plane
-    var geometry = new THREE.PlaneBufferGeometry(5, 5);
+    var geometry = new THREE.PlaneBufferGeometry(geomPos.geometry, geomPos.geometry);
     var material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
 
     // Used for smaller planes of drawer (sides and back)
-    var geometrySmall = new THREE.PlaneBufferGeometry(5, 1);
+    var geometrySmall = new THREE.PlaneBufferGeometry(geomPos.geometry, geomPos.geometryOther);
     var materialSmall = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
 
-    var geometryEdge = new THREE.PlaneBufferGeometry(5, 5);
+    var geometryEdge = new THREE.PlaneBufferGeometry(geomPos.geometry, geomPos.geometry);
     var materialEdge = new THREE.MeshBasicMaterial({map: texture_edge, side: THREE.DoubleSide});
 
-    var geometryEdgeSmall = new THREE.PlaneBufferGeometry(5, 1);
+    var geometryEdgeSmall = new THREE.PlaneBufferGeometry(geomPos.geometry, geomPos.geometryOther);
     var materialEdgeSmall = new THREE.MeshBasicMaterial({map: texture_edge, side: THREE.DoubleSide});
 
-    var geomPos = getEdgeGeometryPositon(drawer_type);
+    
 
     for (var i = 0; i < nbDrawers; i++) {
         // Bottom plane
@@ -168,7 +170,8 @@ function getEdgeGeometryPositon(drawer_type) {
     switch (drawer_type) {
         case "common":
             var geomPos = {
-                geometry: 5,
+                geometry: 10,
+                geometryOther: 1,
                 spacing: 0.01,
                 scale: 1
             };
