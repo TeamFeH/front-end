@@ -14,6 +14,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000011, 1);
 document.body.appendChild(renderer.domElement);
 
+console.log(THREE.FontUtils.faces);
+
 // Call server to get shelf's json
 $.ajax({
     type: "GET",
