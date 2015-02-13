@@ -31,12 +31,11 @@ $.ajax({
 // Get the shelf in the local storage
 var shelf = JSON.parse(localStorage.getItem("shelf"));
 
-
-// Generate drawer
-generateDrawer(shelf, 'images/shelf.jpg', 0, 0, 0);
-generateEdges('images/shelf_edge.jpg', 0,0,0, (shelf.drawers).length);
 // Generate floor
 generateFloor('images/floor.jpg');
+// Generate drawer
+generateShelf(shelf, 'images/shelf.jpg','images/shelf_edge.jpg', 0, 0, 0, "common");
+//generateEdges(shelf, 'images/shelf_edge.jpg', 0,0,0, "common");
 
 // Listen to mouse down event (call onDocumentMouseDown)
 document.addEventListener('mousedown', onDocumentMouseDown, false);
@@ -78,14 +77,14 @@ function onDocumentMouseDown(event) {
             if (objects[i].name === drawerName) {
                 // Ouvre le drawer
                 if (objects[i].is_opened === false) {
-                      // Animation ouverture
+                      // Animation open
                       tweenOpen = new TWEEN.Tween(objects[i].position)
                       .to({z : objects[i].base_pos_z + 5},1000);
                       tweenOpen.start();
 
                     objects[i].is_opened = true;
                 } else {
-                     // Animation fermeture
+                     // Animation close
                      tweenClose = new TWEEN.Tween(objects[i].position)
                          .to({z : objects[i].base_pos_z}, 1000)
                          .start();
