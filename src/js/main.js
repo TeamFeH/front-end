@@ -4,8 +4,8 @@ var objects = [];
 
 // create scene and camera
 var scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera(20, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.z = 30;
+camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 1000);
+camera.position.z = 35;
 camera.position.y = 10;
 controls = new THREE.OrbitControls(camera);
 // create a renderer, set its size, append it to the document.
@@ -34,7 +34,7 @@ $.ajax({
 var shelf = JSON.parse(localStorage.getItem("shelf"));
 
 // Generate floor
-generateFloor('images/floor.jpg');
+generateFloor('images/floor.jpg', 100, 100, "common");
 // Generate drawer
 generateShelf(shelf, 'images/shelf.jpg','images/shelf_edge.jpg', 0, 0, 0, "common");
 //generateEdges(shelf, 'images/shelf_edge.jpg', 0,0,0, "common");
