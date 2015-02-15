@@ -34,9 +34,9 @@ $.ajax({
 var shelf = JSON.parse(localStorage.getItem("shelf"));
 
 // Generate floor
-generateFloor('images/floor.jpg', 100, 100, "common");
+generateFloor('images/floor.jpg', 100, 100, "scale-2");
 // Generate drawer
-generateShelf(shelf, 'images/shelf.jpg','images/shelf_edge.jpg', 0, 0, 0, "common");
+generateShelf(shelf, 'images/shelf.jpg','images/shelf_edge.jpg', 0, 0, 0, "scale-2");
 //generateEdges(shelf, 'images/shelf_edge.jpg', 0,0,0, "common");
 
 // Listen to mouse down event (call onDocumentMouseDown)

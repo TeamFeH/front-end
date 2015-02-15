@@ -104,21 +104,21 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
 
         // Text
         var materialText = new THREE.MeshBasicMaterial({
-            color: 0xDAB30A
+            color: 0x000000
         });
         var textGeom = new THREE.TextGeometry( obj_shelf.drawers[i].name, {
             size: 0.35, height: 0,
             font: 'helvetiker', weight: 'normal',
-            bevelThickness: 0.01,
+            bevelThickness: 0.05,
             bevelSize: 0,
             bevelEnabled: true
         });
 
         var drawerNameMesh = new THREE.Mesh (textGeom, materialText);
-        drawerNameMesh.position.x = pos_x - (geomPos.geometry / 2) + geomPos.spacingText;
+        drawerNameMesh.position.x = pos_x - (geomPos.geometry / 2) + (geomPos.spacingText * geomPos.scale);
         drawerNameMesh.position.y = pos_y + geomPos.geometryOther * i ;
         drawerNameMesh.position.z = pos_z + (geomPos.geometry + (geomPos.geometry/2));
-        drawerNameMesh['base_pos_x'] = pos_x - (geomPos.geometry / 2) + geomPos.spacingText;
+        drawerNameMesh['base_pos_x'] = pos_x - (geomPos.geometry / 2) + (geomPos.spacingText * geomPos.scale);
         drawerNameMesh['base_pos_y'] = geomPos.scale + i + pos_y;
         drawerNameMesh['base_pos_z'] = pos_z +  (geomPos.geometry + (geomPos.geometry/2));
         drawerNameMesh['name'] = obj_shelf.drawers[i].name;
@@ -203,8 +203,28 @@ function getEdgeGeometryPositon(drawer_type) {
                 geometry: 5,
                 geometryOther: 1,
                 spacing: 0.01,
-                spacingText: 0.5,
+                spacingText: 1,
                 scale: 1
+            };
+            return geomPos;
+            break;
+        case "scale-2":
+            var geomPos = {
+                geometry: 5,
+                geometryOther: 2,
+                spacing: 0.01,
+                spacingText: 0.5,
+                scale: 2
+            };
+            return geomPos;
+            break;
+        case "scale-3-bigger":
+            var geomPos = {
+                geometry: 10,
+                geometryOther: 3,
+                spacing: 0.01,
+                spacingText: 0.5,
+                scale: 3
             };
             return geomPos;
             break;
