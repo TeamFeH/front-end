@@ -14,7 +14,7 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
     texture_edge = THREE.ImageUtils.loadTexture(url_texture_edge);
 
     // Get General Position and Geometry of a drawer type
-    var geomPos = getEdgeGeometryPositon(drawer_type);
+    var geomPos = getGeometryPositon(drawer_type);
 
     // Geometry used for bottom plane
     var geometry = new THREE.PlaneBufferGeometry(geomPos.geometry, geomPos.geometry);
@@ -41,7 +41,7 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
         planeBottom.position.y = -(geomPos.scale / 2) + (i * geomPos.scale) + pos_y;
         planeBottom.position.z = geomPos.geometry + pos_z;
         planeBottom['base_pos_x'] = pos_x;
-        planeBottom['base_pos_y'] = geomPos.spacing + i + pos_y;
+        planeBottom['base_pos_y'] = -(geomPos.scale / 2) + (i * geomPos.scale) + pos_y;
         planeBottom['base_pos_z'] = geomPos.geometry + pos_z;
         planeBottom['name'] = obj_shelf.drawers[i].name;
         planeBottom["shelf_name"] = obj_shelf.name;
@@ -151,7 +151,7 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
         edgeBack.position.y = pos_y + (i * geomPos.scale);
         edgeBack.position.z = (geomPos.geometry / 2) - geomPos.spacing + pos_z;
 
-       // Bottom edge
+        // Bottom edge
         var edgeBottom = new THREE.Mesh(geometryEdge, materialEdge);
         edgeBottom.rotation.x = Math.PI / 2;
         edgeBottom.position.x = pos_x;
@@ -178,7 +178,7 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
         scene.add(edgeBack);
         scene.add(edgeTop);
         scene.add(edgeBottom);
-        
+
         // Aded text to scene
         scene.add(drawerNameMesh);
 
@@ -204,10 +204,10 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
             planePdf.rotation.x = Math.PI * geomPos.thumbAngle;
             planePdf.position.x = pos_x - (geomPos.geometryThumb / 2);
             planePdf.position.y = (i * geomPos.scale) + pos_y;
-            planePdf.position.z = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - (j + 1 + geomPos.spacing);
+            planePdf.position.z = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j/2) + geomPos.spacingThumb);
             planePdf['base_pos_x'] = pos_x;
             planePdf['base_pos_y'] = i * geomPos.scale + pos_y;
-            planePdf['base_pos_z'] = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - (j + 1 + geomPos.spacing);
+            planePdf['base_pos_z'] = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j/2) + geomPos.spacingThumb);
             planePdf['name'] = obj_shelf.drawers[i].name;
             planePdf["shelf_name"] = obj_shelf.name;
             planePdf["drawer_name"] = obj_shelf.drawers[i].name;
@@ -216,56 +216,56 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
             planePdf["is_pdf"] = true;
 
             scene.add(planePdf);
+            // Add pdf to Pdfs list
             objectsPdf.push(planePdf);
             // Add Pdf to objects list
             objects.push(planePdf);
-
         }
     }
 
 }
 
 /**
- * 
+ * Get general Geometry of a drawer
  * @param {type} drawer_type
  * @returns {unresolved}
  */
-function getEdgeGeometryPositon(drawer_type) {
+function getGeometryPositon(drawer_type) {
     switch (drawer_type) {
-        case "common":
+        case "small":
             var geomPos = {
                 geometry: 5,
                 geometryOther: 1,
                 geometryThumb: 2.5,
                 spacing: 0.01,
                 spacingText: 1,
-                spacingThumb: 1,
+                spacingThumb: 0.5,
                 thumbAngle: 1.95,
                 scale: 1
             };
             return geomPos;
             break;
-        case "scale-2":
+        case "normal":
             var geomPos = {
                 geometry: 5,
                 geometryOther: 2,
                 geometryThumb: 2.5,
                 spacing: 0.01,
                 spacingText: 0.5,
-                spacingThumb: 1,
+                spacingThumb: 0.5,
                 thumbAngle: 1.95,
                 scale: 2
             };
             return geomPos;
             break;
-        case "scale-3-bigger":
+        case "big":
             var geomPos = {
                 geometry: 10,
                 geometryOther: 3,
                 geometryThumb: 5,
                 spacing: 0.01,
                 spacingText: 0.5,
-                spacingThumb: 1,
+                spacingThumb: 0.5,
                 thumbAngle: 1.95,
                 scale: 3
             };

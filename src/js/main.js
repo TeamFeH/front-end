@@ -6,9 +6,9 @@ var mouse = {x: 0, y: 0}, intersected;
 
 // create scene and camera
 var scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.z = 35;
-camera.position.y = 10;
+camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 1, 1000);
+camera.position.z = 45;
+camera.position.y = 13;
 controls = new THREE.OrbitControls(camera);
 // create a renderer, set its size, append it to the document.
 var renderer = new THREE.WebGLRenderer();
@@ -36,9 +36,9 @@ $.ajax({
 var shelf = JSON.parse(localStorage.getItem("shelf"));
 
 // Generate floor
-generateFloor('images/floor.jpg', 100, 100, "common");
+generateFloor('images/floor.jpg', 100, 100);
 // Generate drawer
-generateShelf(shelf, 'images/shelf.jpg', 'images/shelf_edge.jpg', 0, 0, 0, "common");
+generateShelf(shelf, 'images/shelf.jpg', 'images/shelf_edge.jpg', 0, 0, 0, "normal");
 //generateEdges(shelf, 'images/shelf_edge.jpg', 0,0,0, "common");
 
 scene.add(new THREE.AmbientLight(0x000000));
@@ -85,7 +85,6 @@ function onDocumentMouseDown(event) {
         // Click on PDF
         if (intersects[0].object.is_pdf === true) {
             // TODO : Open window with PDF url
-            console.log(intersects[0].object);
         // Click oon drawer
         } else {
             for (var i = 0; i < objects.length; i++) {
