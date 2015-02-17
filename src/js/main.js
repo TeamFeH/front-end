@@ -1,10 +1,12 @@
 var raycaster;
 var mouse;
 var objects = [];
+var objectsPdf = [];
+var mouse = {x: 0, y: 0}, intersected;
 
 // create scene and camera
 var scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 1000);
+camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
 camera.position.z = 35;
 camera.position.y = 10;
 controls = new THREE.OrbitControls(camera);
@@ -34,13 +36,17 @@ $.ajax({
 var shelf = JSON.parse(localStorage.getItem("shelf"));
 
 // Generate floor
-generateFloor('images/floor.jpg', 100, 100, "scale-2");
+generateFloor('images/floor.jpg', 100, 100, "common");
 // Generate drawer
-generateShelf(shelf, 'images/shelf.jpg','images/shelf_edge.jpg', 0, 0, 0, "scale-2");
+generateShelf(shelf, 'images/shelf.jpg', 'images/shelf_edge.jpg', 0, 0, 0, "common");
 //generateEdges(shelf, 'images/shelf_edge.jpg', 0,0,0, "common");
+
+scene.add(new THREE.AmbientLight(0x000000));
 
 // Listen to mouse down event (call onDocumentMouseDown)
 document.addEventListener('mousedown', onDocumentMouseDown, false);
+// Resize scene on window resize
+window.addEventListener('resize', onWindowResize, false);
 
 // Usefull to color cubes on click
 raycaster = new THREE.Raycaster();
@@ -71,29 +77,50 @@ function onDocumentMouseDown(event) {
     var intersects = raycaster.intersectObjects(objects);
 
     // Cube trick
-    var tweenOpen,tweenClose;
+    var tweenOpen, tweenClose;
     // Search all objects (faces) of the same drawer and move them on click
     if (intersects.length > 0) {
         var drawerName = intersects[0].object.drawer_name;
-        for (var i = 0; i < objects.length; i++) {
-            if (objects[i].name === drawerName) {
-                // Ouvre le drawer
-                if (objects[i].is_opened === false) {
-                      // Animation open
-                      tweenOpen = new TWEEN.Tween(objects[i].position)
-                      .to({z : objects[i].base_pos_z + 5},1000);
-                      tweenOpen.start();
 
-                    objects[i].is_opened = true;
-                } else {
-                     // Animation close
-                     tweenClose = new TWEEN.Tween(objects[i].position)
-                         .to({z : objects[i].base_pos_z}, 1000)
-                         .start();
+        // Click on PDF
+        if (intersects[0].object.is_pdf === true) {
+            // TODO : Open window with PDF url
+            console.log(intersects[0].object);
+        // Click oon drawer
+        } else {
+            for (var i = 0; i < objects.length; i++) {
+                if (objects[i].name === drawerName) {
+                    // Ouvre le drawer
+                    if (objects[i].is_opened === false) {
+                        // Animation open
+                        tweenOpen = new TWEEN.Tween(objects[i].position)
+                                .to({z: objects[i].base_pos_z + 5}, 1000);
+                        tweenOpen.start();
 
-                    objects[i].is_opened = false;
+                        objects[i].is_opened = true;
+                    } else {
+                        // Animation close
+                        tweenClose = new TWEEN.Tween(objects[i].position)
+                                .to({z: objects[i].base_pos_z}, 1000)
+                                .start();
+
+                        objects[i].is_opened = false;
+                    }
                 }
             }
         }
     }
+}
+
+/**
+ * Resize scene on window resize
+ * @returns {undefined}
+ */
+function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
 }
