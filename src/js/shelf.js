@@ -194,20 +194,20 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
 
         // Loop to add every pdf in drawer (1 Pdf = 1 Plane)
         for (var j = 0; j < obj_shelf.drawers[i].pdfs.length; j++) {
-            texturePdf = THREE.ImageUtils.loadTexture('images/thumb.jpeg');
+            var path = "http://127.0.0.1:8000" + obj_shelf.drawers[i].pdfs[j].thumbnail_url;
 
             var geometryPdf = new THREE.PlaneBufferGeometry(geomPos.geometryThumb, geomPos.geometryOther);
-            var materialPdf = new THREE.MeshBasicMaterial({map: texturePdf, side: THREE.DoubleSide});
+            var materialPdf = new THREE.MeshBasicMaterial({map: loadImage(path)});
 
             // Pdf Plane
             var planePdf = new THREE.Mesh(geometryPdf, materialPdf);
             planePdf.rotation.x = Math.PI * geomPos.thumbAngle;
             planePdf.position.x = pos_x - (geomPos.geometryThumb / 2);
             planePdf.position.y = (i * geomPos.scale) + pos_y;
-            planePdf.position.z = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j/2) + geomPos.spacingThumb);
+            planePdf.position.z = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j / 2) + geomPos.spacingThumb);
             planePdf['base_pos_x'] = pos_x;
             planePdf['base_pos_y'] = i * geomPos.scale + pos_y;
-            planePdf['base_pos_z'] = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j/2) + geomPos.spacingThumb);
+            planePdf['base_pos_z'] = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j / 2) + geomPos.spacingThumb);
             planePdf['name'] = obj_shelf.drawers[i].name;
             planePdf['pdf_name'] = obj_shelf.drawers[i].pdfs[j].name;
             planePdf["shelf_name"] = obj_shelf.name;
@@ -277,4 +277,35 @@ function getGeometryPositon(drawer_type) {
 
 }
 
+/**
+ * Create a texture from an image path 
+ * @param string path
+ * @returns {THREE.Texture|loadImage.texture}
+ */
+function loadImage(path) {
+    // Create a canvas
+    var canvas = document.createElement('canvas');
+    canvas.style.position = 'absolute';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
 
+    // Create a texture with canvas
+    var texture = new THREE.Texture(canvas);
+
+    // Create image
+    var img = new Image();
+    img.crossOrigin = true;
+    // Load image on canvas
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+
+        // Update texture (if not loaded yet)
+        texture.needsUpdate = true;
+    };
+    img.src = path;
+    return texture;
+}
