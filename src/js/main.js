@@ -64,6 +64,7 @@ render();
 
 function onDocumentMouseDown(event) {
 
+
     event.preventDefault();
 
     // Mouse position
@@ -90,35 +91,48 @@ function onDocumentMouseDown(event) {
         // TODO TIMEOUT
         if (intersects[0].object.is_pdf === true) {
             var pdfName = intersects[0].object.pdf_name;
-            for (var i=0; i < objectsPdf.length; i++){
-                if (objectsPdf[i].pdf_name === pdfName){
-                    if (objectsPdf[i].is_PDFopened === false ){
+            for (var i = 0; i < objectsPdf.length; i++) {
+
+                if (objectsPdf[i].pdf_name === pdfName) {
+                    if (objectsPdf[i].is_PDFopened === false) {
                         PDFOpen = new TWEEN.Tween(objectsPdf[i].position)
-                            .to({ y : objectsPdf[i].base_pos_y + 3}, 1000)
-                            .start();
+                                .to({y: objectsPdf[i].base_pos_y + 3}, 1000)
+                                .start();
                         objectsPdf[i].is_opened = true;
                         objectsPdf[i].is_PDFopened = true;
+                        
+                        // var used to handle closing of pdf
+                        var handlePdf = objectsPdf[i];
+                        // Timeout with anonymous function to close pdf
+                        setTimeout(function () {
+                            (function (handlePdf) {
+                                PDFClose = new TWEEN.Tween(handlePdf.position)
+                                        .to({y: handlePdf.base_pos_y}, 1000)
+                                        .start();
+                                handlePdf.is_PDFopened = false;
+                            })(handlePdf);
+                        }, 4000);
                     }
                     else
                     {
-                        if (objectsPdf[i].is_PDFopened === true && theWindow == null){
-                        var theWindow=window.open(objectsPdf[i].pdf_url,'_blank', 'fullscreen=yes');
-                        console.log(theWindow);
+                        if (objectsPdf[i].is_PDFopened === true && theWindow == null) {
+                            var theWindow = window.open(objectsPdf[i].pdf_url, '_blank', 'fullscreen=yes');
+                            console.log(theWindow);
                         }
-                        if(objectsPdf[i].is_PDFopened == true && theWindow){
-                            
+                        if (objectsPdf[i].is_PDFopened == true && theWindow) {
+
                             PDFClose = new TWEEN.Tween(objectsPdf[i].position)
-                                .to ({ y : objectsPdf[i].base_pos_y}, 1000)
-                                .start();
+                                    .to({y: objectsPdf[i].base_pos_y}, 1000)
+                                    .start();
                             objectsPdf[i].is_PDFopened = false;
                         }
                     }
 
                 }
 
-            }            
+            }
 
-        // Click oon drawer
+            // Click oon drawer
         } else {
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].name === drawerName) {
@@ -133,12 +147,12 @@ function onDocumentMouseDown(event) {
                     } else {
 
                         //On ferme les PDFs si on ferme les tiroirs
-                        for (var y=0; y < objectsPdf.length;y++){
-                            if(objectsPdf[y].name == drawerName){
+                        for (var y = 0; y < objectsPdf.length; y++) {
+                            if (objectsPdf[y].name == drawerName) {
 
-                                 PDFClose = new TWEEN.Tween(objectsPdf[y].position)
-                                    .to ({ y : objectsPdf[y].base_pos_y}, 1000)
-                                    .start();
+                                PDFClose = new TWEEN.Tween(objectsPdf[y].position)
+                                        .to({y: objectsPdf[y].base_pos_y}, 1000)
+                                        .start();
                                 objectsPdf[y].is_PDFopened = false;
 
                             }
