@@ -76,15 +76,48 @@ function onDocumentMouseDown(event) {
     // Get clicked object
     var intersects = raycaster.intersectObjects(objects);
 
+//    console.log(objectsPdf);
+
     // Cube trick
     var tweenOpen, tweenClose;
+    var PDFOpen, PDFClose;
+    var theWindow = null;
     // Search all objects (faces) of the same drawer and move them on click
     if (intersects.length > 0) {
         var drawerName = intersects[0].object.drawer_name;
 
-        // Click on PDF
+        // Click on PDF 
+        // TODO TIMEOUT
         if (intersects[0].object.is_pdf === true) {
-            // TODO : Open window with PDF url
+            var pdfName = intersects[0].object.pdf_name;
+            for (var i=0; i < objectsPdf.length; i++){
+                if (objectsPdf[i].pdf_name === pdfName){
+                    if (objectsPdf[i].is_PDFopened === false ){
+                        PDFOpen = new TWEEN.Tween(objectsPdf[i].position)
+                            .to({ y : objectsPdf[i].base_pos_y + 3}, 1000)
+                            .start();
+                        objectsPdf[i].is_opened = true;
+                        objectsPdf[i].is_PDFopened = true;
+                    }
+                    else
+                    {
+                        if (objectsPdf[i].is_PDFopened === true && theWindow == null){
+                        var theWindow=window.open(objectsPdf[i].pdf_url,'_blank', 'fullscreen=yes');
+                        console.log(theWindow);
+                        }
+                        if(objectsPdf[i].is_PDFopened == true && theWindow){
+                            
+                            PDFClose = new TWEEN.Tween(objectsPdf[i].position)
+                                .to ({ y : objectsPdf[i].base_pos_y}, 1000)
+                                .start();
+                            objectsPdf[i].is_PDFopened = false;
+                        }
+                    }
+
+                }
+
+            }            
+
         // Click oon drawer
         } else {
             for (var i = 0; i < objects.length; i++) {

@@ -209,9 +209,11 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
             planePdf['base_pos_y'] = i * geomPos.scale + pos_y;
             planePdf['base_pos_z'] = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j/2) + geomPos.spacingThumb);
             planePdf['name'] = obj_shelf.drawers[i].name;
+            planePdf['pdf_name'] = obj_shelf.drawers[i].pdfs[j].name;
             planePdf["shelf_name"] = obj_shelf.name;
             planePdf["drawer_name"] = obj_shelf.drawers[i].name;
             planePdf["pdf_url"] = obj_shelf.drawers[i].pdfs[j].image_url;
+            planePdf["is_PDFopened"] = false;
             planePdf["is_opened"] = false;
             planePdf["is_pdf"] = true;
 
