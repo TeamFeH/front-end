@@ -131,6 +131,18 @@ function onDocumentMouseDown(event) {
 
                         objects[i].is_opened = true;
                     } else {
+
+                        //On ferme les PDFs si on ferme les tiroirs
+                        for (var y=0; y < objectsPdf.length;y++){
+                            if(objectsPdf[y].name == drawerName){
+
+                                 PDFClose = new TWEEN.Tween(objectsPdf[y].position)
+                                    .to ({ y : objectsPdf[y].base_pos_y}, 1000)
+                                    .start();
+                                objectsPdf[y].is_PDFopened = false;
+
+                            }
+                        }
                         // Animation close
                         tweenClose = new TWEEN.Tween(objects[i].position)
                                 .to({z: objects[i].base_pos_z}, 1000)
