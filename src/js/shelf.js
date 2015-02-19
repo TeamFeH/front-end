@@ -192,22 +192,32 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
         //Add text to objets list
         objects.push(drawerNameMesh);
 
+        var nbPdf = obj_shelf.drawers[i].pdfs.length;
+        var maxPdfLine = 9;
         // Loop to add every pdf in drawer (1 Pdf = 1 Plane)
-        for (var j = 0; j < obj_shelf.drawers[i].pdfs.length; j++) {
+        for (var j = 0; j < nbPdf; j++) {
+            if (j < maxPdfLine) {
+                var position_x = pos_x - (geomPos.geometryThumb / 2);
+                var position_z = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j / 2) + geomPos.spacingThumb);
+            } else {
+                var position_x = pos_x + (geomPos.geometryThumb / 2);
+                var position_z = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j / 2) + geomPos.spacingThumb - maxPdfLine / 2);
+            }
+
             var path = "http://127.0.0.1:8000" + obj_shelf.drawers[i].pdfs[j].thumbnail_url;
 
-            var geometryPdf = new THREE.PlaneBufferGeometry(geomPos.geometryThumb, geomPos.geometryOther);
+            var geometryPdf = new THREE.PlaneBufferGeometry(geomPos.geometryThumb - geomPos.spacingThumb, geomPos.geometryOther);
             var materialPdf = new THREE.MeshBasicMaterial({map: loadImage(path)});
 
             // Pdf Plane
             var planePdf = new THREE.Mesh(geometryPdf, materialPdf);
             planePdf.rotation.x = Math.PI * geomPos.thumbAngle;
-            planePdf.position.x = pos_x - (geomPos.geometryThumb / 2);
+            planePdf.position.x = position_x;
             planePdf.position.y = (i * geomPos.scale) + pos_y;
-            planePdf.position.z = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j / 2) + geomPos.spacingThumb);
-            planePdf['base_pos_x'] = pos_x;
+            planePdf.position.z = position_z;
+            planePdf['base_pos_x'] = position_x;
             planePdf['base_pos_y'] = i * geomPos.scale + pos_y;
-            planePdf['base_pos_z'] = (geomPos.geometry + (geomPos.geometry / 2)) + pos_z - ((j / 2) + geomPos.spacingThumb);
+            planePdf['base_pos_z'] = position_z;
             planePdf['name'] = obj_shelf.drawers[i].name;
             planePdf['pdf_name'] = obj_shelf.drawers[i].pdfs[j].name;
             planePdf["shelf_name"] = obj_shelf.name;
@@ -224,7 +234,6 @@ function generateShelf(obj_shelf, url_texture, url_texture_edge, pos_x, pos_y, p
             objects.push(planePdf);
         }
     }
-
 }
 
 /**
@@ -301,7 +310,17 @@ function loadImage(path) {
         canvas.height = img.height;
 
         var context = canvas.getContext('2d');
+
+        context.strokeStyle = 'grey';
+        context.lineWidth = 3;
         context.drawImage(img, 0, 0);
+        context.moveTo(0, 0);
+        context.lineTo(canvas.width, 0);
+        context.lineTo(canvas.height, canvas.height);
+        context.moveTo(0, 0);
+        context.lineTo(0, canvas.height);
+        context.lineTo(canvas.width, canvas.height);
+        context.stroke();
 
         // Update texture (if not loaded yet)
         texture.needsUpdate = true;
