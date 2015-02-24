@@ -130,7 +130,7 @@ function onDocumentMouseDown(event) {
                             }, 5000);
                         } else {
                             if (objectsPdf[i].is_PDFopened === true && theWindow == null) {
-                                var theWindow = window.open(objectsPdf[i].pdf_url, '_blank', 'fullscreen=yes');
+                                var theWindow = window.open("http://127.0.0.1:8000" +objectsPdf[i].pdf_url, '_blank', 'fullscreen=yes');
                                 console.log(theWindow);
                             }
                             if (objectsPdf[i].is_PDFopened == true && theWindow) {
